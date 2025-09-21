@@ -1,38 +1,61 @@
-# financas
+Este aplicativo Flutter permite que os usuários gerenciem suas finanças pessoais de forma eficiente, oferecendo funcionalidades completas para controle de gastos e visualização de dados. O aplicativo utiliza o GetX para gerenciamento de estado, garantindo um desenvolvimento ágil e uma performance otimizada.
+Funcionalidades Principais
 
-### Qual Gerenciador de Estados será utilizado para construir os módulos
+    Autenticação:
 
-- GetX 
+        Login, cadastro e recuperação de senha.
 
-### Funcionalidades
- - Login
- - Cadastro
- - Recuperar senha
- - Redirecionamento para tela principal do app
- - Armazenar os usuários e acessos no painel do firebase
- - Subir e restaurar imagem do perfil pela câmera ou pela galeria do app
- - Cadastrar, armazenar e visualizar contas
- - Layout com gráficos
+        Armazenamento seguro de usuários e acessos no Firebase.
 
-### Launcher Icons
+        Comunicação com um servidor externo para autenticação.
 
-- Ícones de carregamento
-- ícone do app no celular
+        Identificação e redirecionamento do usuário para as funcionalidades do app.
 
-### Flavors
-- Ambientes (dev, teste, produção)
+        Restauração automática do usuário que já fez login anteriormente.
 
-### Autenticação 
- - Comunica com um servidor externo para realizara autenticação
- - Identifica o usuário e redireciona para as funcionalidades
+    Gerenciamento de Perfil:
 
-### Autenticação
- - Comunica com um servidor externo para realizar a autenticação
- - Identificação do usuário e redirecionamento para as funcionalidades
- - Restaurar o usuário que ja fez o login anteriormente na aplicação
+        Upload e restauração de imagem de perfil (câmera ou galeria).
 
-### Handle de imagens
- - Subir as imagens e restaurar elas do storage
+    Contas:
 
-### Home Screen
- - Funcionalidade principal do aplicativo: salvar as despesas mensais
+        Cadastro, armazenamento e visualização de contas.
+
+    Tela Inicial (Home Screen):
+
+        Funcionalidade principal para salvar as despesas mensais.
+
+        Layout com gráficos interativos mostrando o pico de movimentação financeira por dia da semana.
+
+    Gerenciamento de Estado:
+
+        Utilização do GetX para todos os módulos, garantindo reatividade e simplicidade no gerenciamento de estados
+
+    Outros:
+
+        Launcher Icons personalizados.
+
+        Suporte a diferentes ambientes (dev, teste, produção) via Flavors.
+
+        Handle de imagens para upload e restauração do Storage.
+
+Arquitetura
+
+O aplicativo foi desenvolvido utilizando a arquitetura MVVM, visando a separação de responsabilidades e a facilidade de manutenção.
+Tecnologias Utilizadas
+
+    Flutter
+
+    Dart
+
+    GetX (Gerenciamento de Estado)
+
+    Firebase (Autenticação e Armazenamento)
+
+Como Executar o Projeto
+
+    Clone o repositório.
+
+    Execute flutter pub get para instalar as dependências.
+
+    Execute flutter run para rodar o aplicativo.
