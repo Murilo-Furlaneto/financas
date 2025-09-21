@@ -50,8 +50,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   },
                   child: Container(
                     padding: const EdgeInsets.all(16),
-                    child: SvgPicture.asset(
-                      "assets/images/logo_bg.svg",
+                    child: Image.asset(
+                      "assets/images/logo_bg.png",
                       height: 80,
                     ),
                   ),

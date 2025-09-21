@@ -1,9 +1,8 @@
 import 'package:financas/model/day/day_model.dart';
 import 'package:financas/model/monthly%20epenses/monthly_expenses_model.dart';
-import 'package:financas/provider/monthly%20expenses/monthly_expenses._provider.dart';
+import 'package:financas/provider/monthly_expenses/monthly_expenses._provider.dart';
 import 'package:financas/views/user/profile_page.dart';
 import 'package:financas/widgets/home/bar_chart_widget.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
