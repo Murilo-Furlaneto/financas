@@ -1,4 +1,4 @@
-Este aplicativo Flutter permite que os usuários gerenciem suas finanças pessoais de forma eficiente, oferecendo funcionalidades completas para controle de gastos e visualização de dados. O aplicativo utiliza o GetX para gerenciamento de estado, garantindo um desenvolvimento ágil e uma performance otimizada.
+Este aplicativo Flutter permite que os usuários gerenciem suas finanças pessoais de forma eficiente, oferecendo funcionalidades completas para controle de gastos e visualização de dados. O aplicativo utiliza o Cubit para gerenciamento de estado, garantindo um desenvolvimento ágil e uma performance otimizada.
 Funcionalidades Principais
 
     Autenticação:
@@ -29,7 +29,7 @@ Funcionalidades Principais
 
     Gerenciamento de Estado:
 
-        Utilização do GetX para todos os módulos, garantindo reatividade e simplicidade no gerenciamento de estados
+        Utilização do Cubit para todos os módulos, garantindo reatividade e simplicidade no gerenciamento de estados
 
     Outros:
 
@@ -48,7 +48,7 @@ Tecnologias Utilizadas
 
     Dart
 
-    GetX (Gerenciamento de Estado)
+    Cubit (Gerenciamento de Estado)
 
     Firebase (Autenticação e Armazenamento)
 
