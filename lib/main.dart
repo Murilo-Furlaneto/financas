@@ -1,14 +1,16 @@
-import 'package:financas/core/helpers/shared%20Preferences/preferences_helper.dart';
+import 'package:financas/core/helpers/shared_preferences/preferences_helper.dart';
 import 'package:financas/data/database/local/sqlite.dart';
-import 'package:financas/provider/monthly_expenses/monthly_expenses._provider.dart';
-import 'package:financas/repository/firebase/firebase_repository.dart';
-import 'package:financas/data/service/firebase_service.dart';
+import 'package:financas/data/repositories/firebase/firebase_repository_impl.dart';
+import 'package:financas/data/repositories/monthly_expenses_repository_impl.dart';
+import 'package:financas/data/services/firebase_service.dart';
 import 'package:financas/firebase_options.dart';
-import 'package:financas/provider/user/user_provider.dart';
-import 'package:financas/views/authentication/check_page.dart';
+import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
+import 'package:financas/ui/authentication/pages/check_page.dart';
+import 'package:financas/ui/monthly_expenses/cubit/monthly_expenses_cubit.dart';
+import 'package:financas/ui/user/cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,16 +19,19 @@ void main() async {
   );
 
   runApp(
-    MultiProvider(
+    MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider<UserViewModel>(
-          create: (_) => UserViewModel(
-            FirebaseRepository(FirebaseService()),
+        BlocProvider<AuthCubit>(
+          create: (_) => AuthCubit(
+            FirebaseRepositoryImpl(FirebaseService()),
             SharedPreferencesHelper(),
           ),
         ),
-        ChangeNotifierProvider<MonthlyExpensesProvider>(
-          create: (_) => MonthlyExpensesProvider(SqliteDataBase.instance),
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(context.read<AuthCubit>()),
+        ),
+        BlocProvider<MonthlyExpensesCubit>(
+          create: (_) => MonthlyExpensesCubit(MonthlyExpensesRepositoryImpl(SqliteDataBase.instance)),
         ),
       ],
       child: const MyApp(),

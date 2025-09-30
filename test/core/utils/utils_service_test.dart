@@ -5,7 +5,7 @@ void main() {
   test('teste da função que retorne o mes atual', () async {
     final UtilsService utilsService = UtilsService();
 
-    String mes = utilsService.retornaMes(DateTime.now().month);
+    String mes = utilsService.returnMonth(DateTime.now().month);
 
     expect(mes, equals('Novembro'));
   });

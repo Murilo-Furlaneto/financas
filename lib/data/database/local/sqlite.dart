@@ -1,4 +1,4 @@
-import 'package:financas/model/monthly%20epenses/monthly_expenses_model.dart';
+import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -30,6 +30,7 @@ class SqliteDataBase {
     CREATE TABLE monthlyExpenses (
       id $idType,
       title $textType,
+      category $textType,
       amount $doubleType,
       dueDate $intType
     )
@@ -45,7 +46,7 @@ class SqliteDataBase {
     final db = await instance.database;
     final maps = await db.query(
       'monthlyExpenses',
-      columns: ['id', 'title', 'amount', 'dueDate'],
+      columns: ['id', 'title','category', 'amount', 'dueDate'],
       where: 'id = ?',
       whereArgs: [id],
     );

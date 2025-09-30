@@ -1,17 +1,11 @@
-import 'package:financas/core/helpers/enum/enum_mes.dart';
+import 'package:financas/core/helpers/enum/enum_month.dart';
 
 class UtilsService {
-  String retornaMes(int mes) {
-    try {
-      if (mes < 1 || mes > 12) {
-        print('Esse mês não existe');
-      } else {
-        return EnumMes.values[mes - 1].toString().split('.').last;
-      }
-    } catch (e) {
-      print('Esse mês não existe.');
-      print("Erro: $e");
+  String returnMonth(int mes) {
+    if (mes < 1 || mes > 12) {
+      throw Exception('Esse mês não existe');
+    } else {
+      return EnumMonth.values[mes - 1].toString().split('.').last;
     }
-    return '';
   }
 }
