@@ -1,3 +1,5 @@
+
+import 'package:financas/ui/charts/view/charts_view.dart';
 import 'package:flutter/material.dart';
 
 class ChartsPage extends StatelessWidget {
@@ -5,13 +7,6 @@ class ChartsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gráficos'),
-      ),
-      body: const Center(
-        child: Text('Página de Gráficos em construção!'),
-      ),
-    );
+    return  const ChartsView();
   }
 }

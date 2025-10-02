@@ -1,11 +1,13 @@
 import 'package:financas/core/helpers/shared_preferences/preferences_helper.dart';
 import 'package:financas/data/database/local/sqlite.dart';
+import 'package:financas/data/repositories/charts_repository_impl.dart';
 import 'package:financas/data/repositories/firebase/firebase_repository_impl.dart';
 import 'package:financas/data/repositories/monthly_expenses_repository_impl.dart';
 import 'package:financas/data/services/firebase_service.dart';
 import 'package:financas/firebase_options.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
 import 'package:financas/ui/authentication/pages/check_page.dart';
+import 'package:financas/ui/charts/cubit/charts_cubit.dart';
 import 'package:financas/ui/monthly_expenses/cubit/monthly_expenses_cubit.dart';
 import 'package:financas/ui/user/cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,9 @@ void main() async {
         ),
         BlocProvider<MonthlyExpensesCubit>(
           create: (_) => MonthlyExpensesCubit(MonthlyExpensesRepositoryImpl(SqliteDataBase.instance)),
+        ),
+        BlocProvider<ChartsCubit>(
+          create: (context) => ChartsCubit(ChartsRepositoryImpl(SqliteDataBase.instance)),
         ),
       ],
       child: const MyApp(),

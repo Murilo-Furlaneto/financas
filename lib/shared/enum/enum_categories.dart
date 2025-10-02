@@ -1,16 +1,16 @@
 enum Categories {
-  TRANSPORT("Transporte"),
-  FOOD("Alimentação"),
-  HEALTH("Saúde"),
-  HOUSING("Moradia"),
-  ENTERTAINMENT("Lazer"),
-  EDUCATION("Educação"),
-  UTILITIES("Serviços Públicos"),
-  SHOPPING("Compras"),
-  TRAVEL("Viagem"),
-  INVESTMENTS("Investimentos"),
-  SAVINGS("Poupança"),
-  OTHER("Outros");
+  transport("Transporte"),
+  food("Alimentação"),
+  health("Saúde"),
+  housing("Moradia"),
+  entertainment("Lazer"),
+  education("Educação"),
+  utilities("Serviços Públicos"),
+  shopping("Compras"),
+  travel("Viagem"),
+  investments("Investimentos"),
+  savings("Poupança"),
+  other("Outros");
 
   final String label;
   const Categories(this.label);

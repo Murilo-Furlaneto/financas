@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:financas/core/helpers/enum/enum_month.dart';
 import 'package:financas/shared/enum/enum_categories.dart';
 import 'package:financas/domain/model/day/day_model.dart';
@@ -135,12 +137,9 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 45, top: 16),
-                    child: Text(
-                      'Resumo semanal',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                 const Text(
+                    'Resumo semanal',
+                    style: TextStyle(fontSize: 20),
                   ),
                   BarChartWidget(
                     days: _calculateWeeklySummary(state.expenses),
@@ -175,7 +174,7 @@ class _HomePageState extends State<HomePage> {
         final weekday = expenseDate.weekday;
         weeklySummary[weekday] = (weeklySummary[weekday] ?? 0) + expense.amount;
       } catch (e) {
-          print('Invalid date for expense "${expense.title}": ${expense.dueDate}');
+          log('Invalid date for expense "${expense.title}": ${expense.dueDate}');
       }
     }
 
@@ -235,6 +234,7 @@ class _HomePageState extends State<HomePage> {
                       labelText: 'Valor',
                     ),
                   ),
+                 const SizedBox(height: 5,),
                   DropdownButton<Categories>(
                     value: selectedCategory,
                     hint: const Text('Selecione uma categoria'),
@@ -279,6 +279,7 @@ class _HomePageState extends State<HomePage> {
                               category: selectedCategory!,
                               amount: amount,
                               dueDate: dueDate,
+                              createdAt: DateTime.now().millisecondsSinceEpoch,
                             ),
                           );
                       Navigator.pop(context);

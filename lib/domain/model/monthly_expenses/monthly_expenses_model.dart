@@ -8,6 +8,7 @@ class MonthlyExpenses {
   final Categories category;
   final double amount;
   final int dueDate;
+  final int createdAt;
 
   MonthlyExpenses({
     required this.id,
@@ -15,6 +16,7 @@ class MonthlyExpenses {
     required this.category,
     required this.amount,
     required this.dueDate,
+    required this.createdAt,
   });
 
   MonthlyExpenses copyWith({
@@ -30,6 +32,7 @@ class MonthlyExpenses {
       category: category ?? this.category,
       amount: amount ?? this.amount,
       dueDate: dueDate ?? this.dueDate,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -40,6 +43,7 @@ class MonthlyExpenses {
       'category': category.label,
       'amount': amount,
       'dueDate': dueDate,
+      'createdAt': createdAt,
     };
   }
 
@@ -50,6 +54,7 @@ class MonthlyExpenses {
       category: Categories.values.firstWhere((element) => element.label == map['category']),
       amount: map['amount'] as double,
       dueDate: map['dueDate'] as int,
+      createdAt: map['createdAt'] as int,
     );
   }
 

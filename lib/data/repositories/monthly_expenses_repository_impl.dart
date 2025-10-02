@@ -26,4 +26,9 @@ class MonthlyExpensesRepositoryImpl implements MonthlyExpensesRepository {
   Future<void> deleteExpense(String id) async {
     await _sqliteDatabase.deleteExpense(id);
   }
+  
+  @override
+  Future<List<MonthlyExpenses>> getAllExpensesByMonth(int month, int year) async{
+    return await _sqliteDatabase.getAllExpensesByMonth(month, year);
+  }
 }

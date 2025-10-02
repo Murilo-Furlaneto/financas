@@ -12,7 +12,13 @@ class MonthlyExpensesCubit extends Cubit<MonthlyExpensesState> {
     try {
       emit(MonthlyExpensesLoading());
       await _repository.createExpense(expense);
-      final updatedExpenses = await _repository.getAllExpenses();
+
+      final now = DateTime.now();
+      final updatedExpenses = await _repository.getAllExpensesByMonth(
+        now.month,
+        now.year,
+      );
+
       emit(MonthlyExpensesLoaded(updatedExpenses));
     } catch (e) {
       emit(MonthlyExpensesError('Erro ao salvar a conta: $e'));
@@ -22,7 +28,9 @@ class MonthlyExpensesCubit extends Cubit<MonthlyExpensesState> {
   Future<void> loadExpenses() async {
     try {
       emit(MonthlyExpensesLoading());
-      final expensesList = await _repository.getAllExpenses();
+      final now = DateTime.now();
+      final expensesList =
+          await _repository.getAllExpensesByMonth(now.month, now.year);
       emit(MonthlyExpensesLoaded(expensesList));
     } catch (e) {
       emit(MonthlyExpensesError('Erro ao carregar as contas: $e'));
