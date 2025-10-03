@@ -1,0 +1,1 @@
+C:\Users\furla\OneDrive\Documentos\Projetos Flutter\financas\build\app\intermediates\cxx\RelWithDebInfo\6ze6y415\obj\arm64-v8a

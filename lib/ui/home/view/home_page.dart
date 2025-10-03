@@ -170,22 +170,22 @@ class _HomePageState extends State<HomePage> {
     final now = DateTime.now();
     for (var expense in expenses) {
       try {
-        final expenseDate = DateTime(now.year, now.month, expense.dueDate);
+        final expenseDate = DateTime(now.year, now.month, expense.createdAt);
         final weekday = expenseDate.weekday;
         weeklySummary[weekday] = (weeklySummary[weekday] ?? 0) + expense.amount;
       } catch (e) {
-          log('Invalid date for expense "${expense.title}": ${expense.dueDate}');
+          log('Invalid date for expense "${expense.title}": ${expense.createdAt}');
       }
     }
 
     return [
-      Day(id: 'Seg', valor: weeklySummary[1]!),
-      Day(id: 'Ter', valor: weeklySummary[2]!),
-      Day(id: 'Qua', valor: weeklySummary[3]!),
-      Day(id: 'Qui', valor: weeklySummary[4]!),
-      Day(id: 'Sex', valor: weeklySummary[5]!),
-      Day(id: 'Sab', valor: weeklySummary[6]!),
-      Day(id: 'Dom', valor: weeklySummary[7]!),
+      Day(id: 'Seg', valor: weeklySummary[2]!),
+      Day(id: 'Ter', valor: weeklySummary[3]!),
+      Day(id: 'Qua', valor: weeklySummary[4]!),
+      Day(id: 'Qui', valor: weeklySummary[5]!),
+      Day(id: 'Sex', valor: weeklySummary[6]!),
+      Day(id: 'Sab', valor: weeklySummary[7]!),
+      Day(id: 'Dom', valor: weeklySummary[1]!),
     ];
   }
 

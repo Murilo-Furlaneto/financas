@@ -17,12 +17,12 @@ class ChartsCubit extends Cubit<ChartsState> {
       final now = DateTime.now();
       final selectedMonth = month ?? now.month;
       final selectedYear = year ?? now.year;
-      final selectedCategory = category ?? 'Outros';
+      final selectedCategory = category ?? "Serviços Públicos";
 
       final expensesByCategory = await _repository.getExpensesGroupedByCategory(
         selectedMonth,
         selectedYear,
-        category: selectedCategory,
+        category: null,
       );
 
       log('Expenses by category fetched: ${expensesByCategory.length} categories');
@@ -30,12 +30,12 @@ class ChartsCubit extends Cubit<ChartsState> {
       final expenses = await _repository.getExpensesByMonth(
         selectedMonth,
         selectedYear,
-        category: selectedCategory,
+        category: null,
       );
 
       log('Expenses by month fetched: ${expenses.length}');
 
-      final categories = ['Outros', ...Categories.values.map((e) => e.name)];
+      final categories = ['', ...Categories.values.map((e) => e.label)];
       emit(ChartsLoaded(
         expensesByCategory: expensesByCategory,
         expenses: expenses,

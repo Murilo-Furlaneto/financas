@@ -1,5 +1,5 @@
+
 import 'package:equatable/equatable.dart';
-import 'package:financas/data/dto/expense_dto.dart';
 import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
 
 abstract class ChartsState extends Equatable {
@@ -36,7 +36,6 @@ class ChartsLoaded extends ChartsState {
         expenses,
         selectedMonth,
         selectedYear,
-        selectedCategory,
         categories,
       ];
 }

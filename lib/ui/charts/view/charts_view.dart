@@ -29,7 +29,6 @@ class ChartsView extends StatelessWidget {
 
             return Column(
               children: [
-                // Filters
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Wrap(
@@ -39,12 +38,12 @@ class ChartsView extends StatelessWidget {
                   children: [
                     _buildMonthFilter(context, state),
                     _buildYearFilter(context, state),
-                    _buildCategoryFilter(context, state),
+                   // _buildCategoryFilter(context, state),
                   ],
                 ),
               ),
                 // Chart
-                if (state.expensesByCategory.isEmpty)
+                if (state.expenses.isEmpty)
                   const SizedBox(
                     height: 200,
                     child: Center(
@@ -52,19 +51,22 @@ class ChartsView extends StatelessWidget {
                     ),
                   )
                 else
-                  SizedBox(
-                    height: 200,
-                    child: PieChart(
-                      PieChartData(
-                        sections: _generatePieChartSections(state.expensesByCategory),
-                        centerSpaceRadius: 40,
-                        sectionsSpace: 2,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 200,
+                      child: PieChart(
+                        PieChartData(
+                          sections: _generatePieChartSections(state.expensesByCategory),
+                          centerSpaceRadius: 40,
+                          sectionsSpace: 2,
+                        ),
                       ),
                     ),
                   ),
                 // "What you spent the most on" list
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.symmetric(vertical: 36.0, horizontal: 8.0),
                   child: Text(
                     'Maiores despesas',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -76,15 +78,15 @@ class ChartsView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final expense = sortedExpenses[index];
                       final category = Categories.values.firstWhere(
-                        (e) => e.name == expense.category,
+                        (e) => e.label == expense.category.label,
                         orElse: () => Categories.other,
                       );
                       return ListTile(
-                        title: Text(expense.title),
-                        subtitle: Text(category.label),
+                        title: Text(expense.title,style:const TextStyle(fontSize: 16.0),),
+                        subtitle: Text(category.label, style: const TextStyle(fontSize: 16.0),),
                         trailing: Text(
                           'R\$ ${expense.amount.toStringAsFixed(2)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                         ),
                       );
                     },
@@ -146,38 +148,16 @@ class ChartsView extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryFilter(BuildContext context, ChartsLoaded state) {
-    return DropdownButton<String>(
-      value: state.selectedCategory,
-      items: state.categories.map((categoryName) {
-        final category = categoryName == 'Outros'
-            ? null
-            : Categories.values.firstWhere((e) => e.name == categoryName);
-        return DropdownMenuItem(
-          value: categoryName,
-          child: Text(category?.label ?? 'Outros'),
-        );
-      }).toList(),
-      onChanged: (value) {
-        if (value != null) {
-          context.read<ChartsCubit>().loadChartData(
-                month: state.selectedMonth,
-                year: state.selectedYear,
-                category: value,
-              );
-        }
-      },
-    );
-  }
+
 
   List<PieChartSectionData> _generatePieChartSections(Map<String, double> expensesByCategory) {
     return expensesByCategory.entries.map((entry) {
-      final category = Categories.values.firstWhere((e) => e.name == entry.key, orElse: () => Categories.other);
+      final category = Categories.values.firstWhere((e) => e.label == entry.key, orElse: () => Categories.other);
       return PieChartSectionData(
         color: _getCategoryColor(category),
         value: entry.value,
-        title: '${entry.value.toStringAsFixed(2)}',
-        radius: 50,
+        title: entry.value.toStringAsFixed(2),
+        radius: 70,
         titleStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,

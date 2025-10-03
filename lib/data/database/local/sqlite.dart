@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -125,7 +127,7 @@ class SqliteDataBase {
 
     String whereClause = 'createdAt >= $startDate AND createdAt <= $endDate';
     if (category != null) {
-      whereClause += ' AND category = \'$category\'';
+      whereClause += " AND category = '$category'";
     }
 
     final result = await db.rawQuery('''
@@ -139,6 +141,7 @@ class SqliteDataBase {
     for (var row in result) {
       expensesByCategory[row['category'] as String] = row['total'] as double;
     }
+    log('Fetched expenses by category for month=$month, year=$year, category=$category: ${expensesByCategory.length} categories', name: 'SqliteDataBase.getExpensesGroupedByCategory');
     return expensesByCategory;
   }
 
@@ -152,7 +155,7 @@ class SqliteDataBase {
     List<dynamic> whereArgs = [startDate, endDate];
 
     if (category != null) {
-      whereClause += ' AND category = ?';
+      whereClause += " AND category = ?";
       whereArgs.add(category);
     }
 
@@ -162,6 +165,7 @@ class SqliteDataBase {
       whereArgs: whereArgs,
     );
 
+    log('Fetched ${result.length} expenses for month=$month, year=$year, category=$category', name: 'SqliteDataBase.getExpensesByMonth');
     return result.map((json) => MonthlyExpenses.fromMap(json)).toList();
   }
 }

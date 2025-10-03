@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'dart:convert';
 
 import 'package:financas/shared/enum/enum_categories.dart';
@@ -32,7 +34,7 @@ class MonthlyExpenses {
       category: category ?? this.category,
       amount: amount ?? this.amount,
       dueDate: dueDate ?? this.dueDate,
-      createdAt: createdAt ?? this.createdAt,
+      createdAt: createdAt,
     );
   }
 

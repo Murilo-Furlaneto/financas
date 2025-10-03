@@ -1,0 +1,2 @@
+C:/Users/furla/OneDrive/Documentos/Projetos Flutter/financas/android/app/.cxx/RelWithDebInfo/6ze6y415/x86/CMakeFiles/edit_cache.dir
+C:/Users/furla/OneDrive/Documentos/Projetos Flutter/financas/android/app/.cxx/RelWithDebInfo/6ze6y415/x86/CMakeFiles/rebuild_cache.dir
