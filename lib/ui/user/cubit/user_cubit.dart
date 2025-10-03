@@ -12,7 +12,7 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoading());
     try {
       final user = await authCubit.getUser();
-      emit(UserLoaded(user));
+      emit(UserLoaded(user!));
     } catch (e) {
       emit(UserError('Erro ao carregar usuário: $e'));
     }
