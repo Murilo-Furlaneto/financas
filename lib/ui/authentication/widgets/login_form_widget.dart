@@ -28,6 +28,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -186,16 +187,13 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                       if (_validation.checkForm(
                           _emailController, _passwordController, context)) {
                         final navigator = Navigator.of(context);
-                        await authCubit.firebaseRepository.loginFirebase(
-                            _emailController.text,
-                            _passwordController.text,
-                            context);
+                        await authCubit.loginFirebase(_emailController.text,
+                            _passwordController.text, context);
 
                         if (!mounted) return;
-                        
-                        navigator.pushReplacement(
-                            MaterialPageRoute(
-                                builder: ((context) => const HomePage())));
+
+                        navigator.pushReplacement(MaterialPageRoute(
+                            builder: ((context) => const HomePage())));
                       }
                     },
                     style: ElevatedButton.styleFrom(

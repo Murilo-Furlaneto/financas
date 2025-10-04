@@ -6,7 +6,6 @@ class FirebaseService {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: senha);
     } catch (e) {
-      // Tratamento de erros comuns
       if (e is FirebaseAuthException) {
         switch (e.code) {
           case 'user-not-found':

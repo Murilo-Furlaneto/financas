@@ -4,6 +4,7 @@ import 'package:financas/data/services/firebase_service.dart';
 import 'package:financas/domain/model/user/user_model.dart' as user;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 class FirebaseRepositoryImpl implements FirebaseRepository {
   final FirebaseService firebaseService;
@@ -14,11 +15,12 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   Future<void> loginFirebase(
       String email, String senha, BuildContext context) async {
     try {
-      await firebaseService.loginFirebase(email, senha,);
+      await firebaseService.loginFirebase(email, senha);
     } on Exception {
       FirebaseError("Erro ao fazer o login");
-    } catch (e) {
-      // Log the error to a logging service
+    } catch (e, stackTrace) {
+      log("Erro inesperado no loginFirebase", error: e, stackTrace: stackTrace);
+      FirebaseError("Erro inesperado ao fazer o login");
     }
   }
 
@@ -28,8 +30,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       await firebaseService.signUpFirebase(nome, email, senha);
     } on Exception {
       FirebaseError("Erro ao fazer o cadastro");
-    } catch (e) {
-      // Log the error to a logging service
+    } catch (e, stackTrace) {
+      log("Erro inesperado no signUpFirebase",
+          error: e, stackTrace: stackTrace);
+      FirebaseError("Erro inesperado ao fazer o cadastro");
     }
   }
 
@@ -39,8 +43,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       await firebaseService.exitAccountFirebase();
     } on Exception {
       FirebaseError("Erro ao fazer logout Firebase");
-    } catch (e) {
-      // Log the error to a logging service
+    } catch (e, stackTrace) {
+      log("Erro inesperado no exitAccoutnFirebase",
+          error: e, stackTrace: stackTrace);
+      FirebaseError("Erro inesperado ao fazer logout");
     }
   }
 
@@ -48,8 +54,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   Future<user.User> getUserInformation() async {
     try {
       User firebaseUser = FirebaseAuth.instance.currentUser!;
-      user.User userModel =
-          user.User(nome: firebaseUser.displayName!, email: firebaseUser.email!, senha: '');
+      user.User userModel = user.User(
+          nome: firebaseUser.displayName!,
+          email: firebaseUser.email!,
+          senha: '');
       return userModel;
     } on FirebaseAuthException {
       rethrow;
@@ -63,7 +71,6 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
     try {
       User userFirebase = FirebaseAuth.instance.currentUser!;
 
-      // Comparar nome e email para verificar se há mudanças
       if (user.nome != userFirebase.displayName) {
         await FirebaseAuth.instance.currentUser!.updateDisplayName(user.nome);
       }
@@ -100,8 +107,8 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   @override
   Future<user.User> getCurrentUser() async {
     User firebaseUser = FirebaseAuth.instance.currentUser!;
-      user.User userModel =
-          user.User(nome: firebaseUser.displayName!, email: firebaseUser.email!, senha: '');
-      return userModel;
+    user.User userModel = user.User(
+        nome: firebaseUser.displayName!, email: firebaseUser.email!, senha: '');
+    return userModel;
   }
 }

@@ -1,8 +1,8 @@
-import 'package:financas/core/helpers/shared_preferences/preferences_helper.dart';
 import 'package:financas/data/database/local/sqlite.dart';
 import 'package:financas/data/repositories/charts_repository_impl.dart';
 import 'package:financas/data/repositories/firebase/firebase_repository_impl.dart';
 import 'package:financas/data/repositories/monthly_expenses_repository_impl.dart';
+import 'package:financas/data/repositories/user_repository_impl.dart';
 import 'package:financas/data/services/firebase_service.dart';
 import 'package:financas/firebase_options.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
@@ -25,18 +25,20 @@ void main() async {
       providers: [
         BlocProvider<AuthCubit>(
           create: (_) => AuthCubit(
+            UserRepositoryImpl(SqliteDataBase.instance),
             FirebaseRepositoryImpl(FirebaseService()),
-            SharedPreferencesHelper(),
           ),
         ),
         BlocProvider<UserCubit>(
           create: (context) => UserCubit(context.read<AuthCubit>()),
         ),
         BlocProvider<MonthlyExpensesCubit>(
-          create: (_) => MonthlyExpensesCubit(MonthlyExpensesRepositoryImpl(SqliteDataBase.instance)),
+          create: (_) => MonthlyExpensesCubit(
+              MonthlyExpensesRepositoryImpl(SqliteDataBase.instance)),
         ),
         BlocProvider<ChartsCubit>(
-          create: (context) => ChartsCubit(ChartsRepositoryImpl(SqliteDataBase.instance)),
+          create: (context) =>
+              ChartsCubit(ChartsRepositoryImpl(SqliteDataBase.instance)),
         ),
       ],
       child: const MyApp(),
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
       ),
-      home: CheckPage(),
+      home: const CheckPage(),
     );
   }
 }

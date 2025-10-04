@@ -17,3 +17,5 @@ class AuthError extends AuthCubitState {
 
   AuthError(this.message);
 }
+
+class AuthPasswordResetEmailSent extends AuthCubitState {}

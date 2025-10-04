@@ -1,17 +1,15 @@
 import 'dart:convert';
 
 class User {
-  final String nome;
-  final String email;
-  final String senha;
- 
+  String nome;
+  String email;
+  String senha;
+
   User({
     required this.nome,
     required this.email,
     required this.senha,
   });
-
-  
 
   User copyWith({
     String? nome,
@@ -43,5 +41,6 @@ class User {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory User.fromJson(String source) =>
+      User.fromMap(json.decode(source) as Map<String, dynamic>);
 }

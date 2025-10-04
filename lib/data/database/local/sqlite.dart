@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
+import 'package:financas/domain/model/user/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -20,7 +21,7 @@ class SqliteDataBase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
     return await openDatabase(path,
-        version: 2, onCreate: _createDB, onUpgrade: _upgradeDB);
+        version: 3, onCreate: _createDB, onUpgrade: _upgradeDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -39,12 +40,28 @@ class SqliteDataBase {
     createdAt $intType
   )
 ''');
+    await db.execute('''
+    CREATE TABLE user (
+      email TEXT PRIMARY KEY,
+      nome TEXT NOT NULL,
+      senha TEXT NOT NULL
+    )
+  ''');
   }
 
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await db.execute(
           'ALTER TABLE monthlyExpenses ADD COLUMN createdAt INTEGER NOT NULL DEFAULT 0');
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+      CREATE TABLE user (
+        email TEXT PRIMARY KEY,
+        nome TEXT NOT NULL,
+        senha TEXT NOT NULL
+      )
+    ''');
     }
   }
 
@@ -58,7 +75,9 @@ class SqliteDataBase {
     final version = await db.getVersion();
     final maps = await db.query(
       'monthlyExpenses',
-      columns: version < 2 ? ['id', 'title', 'category', 'amount', 'dueDate'] : ['id', 'title', 'category', 'amount', 'dueDate', 'createdAt'],
+      columns: version < 2
+          ? ['id', 'title', 'category', 'amount', 'dueDate']
+          : ['id', 'title', 'category', 'amount', 'dueDate', 'createdAt'],
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -141,7 +160,8 @@ class SqliteDataBase {
     for (var row in result) {
       expensesByCategory[row['category'] as String] = row['total'] as double;
     }
-    log('Fetched expenses by category for month=$month, year=$year, category=$category: ${expensesByCategory.length} categories', name: 'SqliteDataBase.getExpensesGroupedByCategory');
+    log('Fetched expenses by category for month=$month, year=$year, category=$category: ${expensesByCategory.length} categories',
+        name: 'SqliteDataBase.getExpensesGroupedByCategory');
     return expensesByCategory;
   }
 
@@ -165,7 +185,45 @@ class SqliteDataBase {
       whereArgs: whereArgs,
     );
 
-    log('Fetched ${result.length} expenses for month=$month, year=$year, category=$category', name: 'SqliteDataBase.getExpensesByMonth');
+    log('Fetched ${result.length} expenses for month=$month, year=$year, category=$category',
+        name: 'SqliteDataBase.getExpensesByMonth');
     return result.map((json) => MonthlyExpenses.fromMap(json)).toList();
+  }
+
+  Future<void> saveUser(User user) async {
+    final db = await instance.database;
+    await db.insert(
+      'user',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<User?> getUser() async {
+    final db = await instance.database;
+    final result = await db.query('user', limit: 1);
+    if (result.isNotEmpty) {
+      return User.fromMap(result.first);
+    }
+    return null;
+  }
+
+  Future<void> updateUser(User user) async {
+    final db = await instance.database;
+    await db.update(
+      'user',
+      user.toMap(),
+      where: 'email = ?',
+      whereArgs: [user.email],
+    );
+  }
+
+  Future<void> deleteUser(String email) async {
+    final db = await instance.database;
+    await db.delete(
+      'user',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
   }
 }

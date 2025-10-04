@@ -92,7 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: uploadImage,
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: _image != null ? FileImage(File(_image!.path)) : null,
+              backgroundImage:
+                  _image != null ? FileImage(File(_image!.path)) : null,
               child: _image == null
                   ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
                   : null,
@@ -101,12 +102,18 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 16),
           Text(
             user.nome,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Text(
-            user.email,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
+            "user.email",
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.grey[600]),
           ),
         ],
       ),
@@ -140,10 +147,14 @@ class _ProfilePageState extends State<ProfilePage> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.exit_to_app, color: Colors.red),
-            title: const Text('Sair da Conta', style: TextStyle(color: Colors.red)),
+            title: const Text('Sair da Conta',
+                style: TextStyle(color: Colors.red)),
             onTap: () async {
               final navigator = Navigator.of(context);
-              await context.read<AuthCubit>().firebaseRepository.exitAccoutnFirebase();
+              await context
+                  .read<AuthCubit>()
+                  .firebaseRepository
+                  .exitAccoutnFirebase();
               if (!mounted) return;
               navigator.pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -156,9 +167,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<void> _showEditProfileDialog(BuildContext context, User currentUser) async {
-    final TextEditingController nameController = TextEditingController(text: currentUser.nome);
-    final TextEditingController emailController = TextEditingController(text: currentUser.email);
+  Future<void> _showEditProfileDialog(
+      BuildContext context, User currentUser) async {
+    final TextEditingController nameController =
+        TextEditingController(text: currentUser.nome);
+    final TextEditingController emailController =
+        TextEditingController(text: currentUser.email);
     final formKey = GlobalKey<FormState>();
 
     return showDialog(
@@ -174,13 +188,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 TextFormField(
                   controller: nameController,
                   decoration: const InputDecoration(labelText: 'Nome'),
-                  validator: (value) => value!.isEmpty ? 'Campo obrigatório' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Campo obrigatório' : null,
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: emailController,
                   decoration: const InputDecoration(labelText: 'Email'),
-                  validator: (value) => value!.isEmpty ? 'Campo obrigatório' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Campo obrigatório' : null,
                 ),
               ],
             ),
@@ -194,10 +210,9 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   final newUser = User(
-                    email: emailController.text,
-                    nome: nameController.text,
-                    senha: '' 
-                  );
+                      email: emailController.text,
+                      nome: nameController.text,
+                      senha: '');
                   await context.read<AuthCubit>().updateUser(newUser);
                   context.read<UserCubit>().getUser();
                   Navigator.pop(context);

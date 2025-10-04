@@ -29,19 +29,19 @@ class ChartsView extends StatelessWidget {
 
             return Column(
               children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  spacing: 8.0,
-                  runSpacing: 4.0,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    _buildMonthFilter(context, state),
-                    _buildYearFilter(context, state),
-                   // _buildCategoryFilter(context, state),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      _buildMonthFilter(context, state),
+                      _buildYearFilter(context, state),
+                      // _buildCategoryFilter(context, state),
+                    ],
+                  ),
                 ),
-              ),
                 // Chart
                 if (state.expenses.isEmpty)
                   const SizedBox(
@@ -57,7 +57,8 @@ class ChartsView extends StatelessWidget {
                       height: 200,
                       child: PieChart(
                         PieChartData(
-                          sections: _generatePieChartSections(state.expensesByCategory),
+                          sections: _generatePieChartSections(
+                              state.expensesByCategory),
                           centerSpaceRadius: 40,
                           sectionsSpace: 2,
                         ),
@@ -66,7 +67,8 @@ class ChartsView extends StatelessWidget {
                   ),
                 // "What you spent the most on" list
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 36.0, horizontal: 8.0),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 36.0, horizontal: 8.0),
                   child: Text(
                     'Maiores despesas',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -82,11 +84,18 @@ class ChartsView extends StatelessWidget {
                         orElse: () => Categories.other,
                       );
                       return ListTile(
-                        title: Text(expense.title,style:const TextStyle(fontSize: 16.0),),
-                        subtitle: Text(category.label, style: const TextStyle(fontSize: 16.0),),
+                        title: Text(
+                          expense.title,
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        subtitle: Text(
+                          category.label,
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
                         trailing: Text(
                           'R\$ ${expense.amount.toStringAsFixed(2)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
                         ),
                       );
                     },
@@ -148,25 +157,33 @@ class ChartsView extends StatelessWidget {
     );
   }
 
+  List<PieChartSectionData> _generatePieChartSections(
+      Map<String, double> expensesByCategory) {
+    final total =
+        expensesByCategory.values.fold(0.0, (sum, item) => sum + item);
+    if (total == 0) {
+      return [];
+    }
 
-
-  List<PieChartSectionData> _generatePieChartSections(Map<String, double> expensesByCategory) {
     return expensesByCategory.entries.map((entry) {
-      final category = Categories.values.firstWhere((e) => e.label == entry.key, orElse: () => Categories.other);
+      final category = Categories.values.firstWhere((e) => e.label == entry.key,
+          orElse: () => Categories.other);
+      final percentage = (entry.value / total) * 100;
+
       return PieChartSectionData(
         color: _getCategoryColor(category),
         value: entry.value,
-        title: entry.value.toStringAsFixed(2),
+        title: '${percentage.toStringAsFixed(0)}%',
         radius: 70,
         titleStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: Colors.white,
+          shadows: [Shadow(color: Colors.black, blurRadius: 2)],
         ),
       );
     }).toList();
   }
-
 
   Color _getCategoryColor(Categories category) {
     switch (category) {
@@ -199,8 +216,18 @@ class ChartsView extends StatelessWidget {
 
   String _getMonthName(int month) {
     const monthNames = [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro'
     ];
     return monthNames[month - 1];
   }
