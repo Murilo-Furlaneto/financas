@@ -59,3 +59,13 @@ Como Executar o Projeto
     Execute flutter pub get para instalar as dependências.
 
     Execute flutter run para rodar o aplicativo.
+
+Imagens 
+
+![Captura de tela 2025-10-04 150736](https://github.com/user-attachments/assets/8f3f355f-ba38-4de8-945a-d2a5cc79fbe2)
+![Captura de tela 2025-10-04 151346](https://github.com/user-attachments/assets/6cf65ada-15d0-44b2-b770-8884d45e297f)
+![Captura de tela 2025-10-04 151409](https://github.com/user-attachments/assets/c5d1515b-e8ea-43a9-a1fe-b17bba279b37)
+![Captura de tela 2025-10-04 151420](https://github.com/user-attachments/assets/906fd403-3267-4b7b-bf26-b613f1edcc62)
+![Captura de tela 2025-10-04 151528](https://github.com/user-attachments/assets/abbc5985-2cc2-40cc-991b-3ceecbff94f6)
+![Captura de tela 2025-10-04 151547](https://github.com/user-attachments/assets/1d1d71b4-69ab-4831-9dea-1253a4a9809f)
+
