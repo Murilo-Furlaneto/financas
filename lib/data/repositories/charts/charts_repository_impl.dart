@@ -2,8 +2,8 @@
 
 import 'package:financas/data/database/local/sqlite.dart';
 import 'package:financas/data/dto/expense_dto.dart';
-import 'package:financas/data/repositories/charts_repository.dart';
-import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
+import 'package:financas/data/repositories/charts/charts_repository.dart';
+import 'package:financas/domain/entities/monthly_expenses/monthly_expenses_entity.dart';
 
 class ChartsRepositoryImpl implements ChartsRepository {
   final SqliteDataBase _sqliteDatabase;

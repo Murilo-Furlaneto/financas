@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
 import 'package:financas/ui/authentication/pages/login_page.dart';
 import 'package:financas/ui/charts/view/charts_page.dart';

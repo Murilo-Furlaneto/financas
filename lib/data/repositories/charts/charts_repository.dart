@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:financas/data/dto/expense_dto.dart';
-import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
+import 'package:financas/domain/entities/monthly_expenses/monthly_expenses_entity.dart';
 
 abstract class ChartsRepository {
   Future<Map<String, double>> getExpensesGroupedByCategory(int month, int year, {String? category});

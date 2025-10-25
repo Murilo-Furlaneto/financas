@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:financas/core/helpers/enum/enum_month.dart';
-import 'package:financas/shared/enum/enum_categories.dart';
-import 'package:financas/domain/model/day/day_model.dart';
-import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
+import 'package:financas/data/enum/enum_month.dart';
+import 'package:financas/data/enum/enum_categories.dart';
+import 'package:financas/domain/entities/day/day_entity.dart';
+import 'package:financas/domain/entities/monthly_expenses/monthly_expenses_entity.dart';
 import 'package:financas/ui/home/widgets/bar_chart_widget.dart';
 import 'package:financas/ui/monthly_expenses/cubit/monthly_expenses_cubit.dart';
 import 'package:financas/ui/monthly_expenses/cubit/monthly_expenses_state.dart';
-import 'package:financas/ui/user/view/profile_page.dart';
+import 'package:financas/ui/user/page/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

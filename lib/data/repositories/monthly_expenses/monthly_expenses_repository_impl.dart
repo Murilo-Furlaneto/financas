@@ -1,6 +1,6 @@
 import 'package:financas/data/database/local/sqlite.dart';
-import 'package:financas/data/repositories/monthly_expenses_repository.dart';
-import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
+import 'package:financas/data/repositories/monthly_expenses/monthly_expenses_repository.dart';
+import 'package:financas/domain/entities/monthly_expenses/monthly_expenses_entity.dart';
 
 class MonthlyExpensesRepositoryImpl implements MonthlyExpensesRepository {
   final SqliteDataBase _sqliteDatabase;

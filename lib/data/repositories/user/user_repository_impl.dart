@@ -1,5 +1,5 @@
-import 'package:financas/data/repositories/user_repository.dart';
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/data/repositories/user/user_repository.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:financas/data/database/local/sqlite.dart';
 
 class UserRepositoryImpl implements UserRepository {

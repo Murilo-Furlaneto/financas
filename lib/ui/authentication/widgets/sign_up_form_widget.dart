@@ -1,10 +1,10 @@
-import 'package:financas/domain/model/user/user_model.dart' as user_model;
+import 'package:financas/domain/entities/user/user_entity.dart' as user_model;
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
 import 'package:financas/ui/authentication/pages/login_page.dart';
-import 'package:financas/ui/home/view/home_page.dart';
+import 'package:financas/ui/home/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:financas/core/validation/validacao_helper.dart';
+import 'package:financas/data/helpers/validation/validacao_helper.dart';
 
 class SignUpFormWidget extends StatefulWidget {
   const SignUpFormWidget({Key? key}) : super(key: key);

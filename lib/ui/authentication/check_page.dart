@@ -1,7 +1,7 @@
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
 import 'package:financas/ui/authentication/pages/sign_up_page.dart';
-import 'package:financas/ui/home/view/home_page.dart';
+import 'package:financas/ui/home/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
