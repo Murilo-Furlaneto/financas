@@ -1,4 +1,4 @@
-import 'package:financas/data/helpers/validation/validacao_helper.dart';
+import 'package:financas/core/helpers/validation/validator_helper.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
 import 'package:financas/ui/authentication/widgets/forgot_password.dart';
 import 'package:financas/ui/authentication/widgets/sign_up_form_widget.dart';
@@ -17,7 +17,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   bool isVisible = false;
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final ValidacaoLogin _validation = ValidacaoLogin();
 
   @override
   Widget build(BuildContext context) {
@@ -184,8 +183,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (_validation.checkForm(
-                          _emailController, _passwordController, context)) {
+                      if (LoginValidator.validateLoginForm(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                          context: context)) {
                         final navigator = Navigator.of(context);
                         await authCubit.loginFirebase(_emailController.text,
                             _passwordController.text, context);

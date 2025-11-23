@@ -1,8 +1,8 @@
 import 'package:financas/data/database/local/sqlite.dart';
-import 'package:financas/data/repositories/charts_repository_impl.dart';
+import 'package:financas/data/repositories/charts/charts_repository_impl.dart';
 import 'package:financas/data/repositories/firebase/firebase_repository_impl.dart';
-import 'package:financas/data/repositories/monthly_expenses_repository_impl.dart';
-import 'package:financas/data/repositories/user_repository_impl.dart';
+import 'package:financas/data/repositories/monthly_expenses/monthly_expenses_repository_impl.dart';
+import 'package:financas/data/repositories/user/user_repository_impl.dart';
 import 'package:financas/data/services/firebase_service.dart';
 import 'package:financas/firebase_options.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';

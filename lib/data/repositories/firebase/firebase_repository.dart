@@ -1,4 +1,4 @@
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:flutter/material.dart';
 
 abstract class FirebaseRepository {

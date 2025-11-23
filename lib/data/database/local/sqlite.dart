@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:financas/domain/model/monthly_expenses/monthly_expenses_model.dart';
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/domain/entities/monthly_expenses/monthly_expenses_entity.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

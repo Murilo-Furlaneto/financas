@@ -4,7 +4,7 @@ import 'package:financas/ui/authentication/pages/login_page.dart';
 import 'package:financas/ui/home/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:financas/data/helpers/validation/validacao_helper.dart';
+import 'package:financas/core/helpers/validation/validator_helper.dart';
 
 class SignUpFormWidget extends StatefulWidget {
   const SignUpFormWidget({Key? key}) : super(key: key);
@@ -18,11 +18,12 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final ValidacaoLogin _validation = ValidacaoLogin();
 
   void _signUp() async {
-    if (_validation.checkForm(
-        _emailController, _passwordController, context)) {
+    if (LoginValidator.validateLoginForm(
+        email: _emailController.text,
+        password: _passwordController.text,
+        context: context)) {
       final navigator = Navigator.of(context);
       final authCubit = context.read<AuthCubit>();
       final name = _nameController.text;
@@ -35,16 +36,13 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
         password,
       );
 
-      await authCubit.saveUser(user_model.User(
-          nome: name,
-          email: email,
-          senha: password));
+      await authCubit
+          .saveUser(user_model.User(nome: name, email: email, senha: password));
 
       if (!mounted) return;
 
       navigator.pushReplacement(
-          MaterialPageRoute(
-              builder: (context) => const HomePage()));
+          MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 

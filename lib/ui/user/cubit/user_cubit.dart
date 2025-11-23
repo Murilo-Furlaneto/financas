@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit.dart';
 import 'package:financas/ui/user/cubit/user_cubit_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

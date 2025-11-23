@@ -1,6 +1,6 @@
 import 'package:financas/data/repositories/firebase/firebase_repository.dart';
-import 'package:financas/data/repositories/user_repository.dart';
-import 'package:financas/domain/model/user/user_model.dart';
+import 'package:financas/data/repositories/user/user_repository.dart';
+import 'package:financas/domain/entities/user/user_entity.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

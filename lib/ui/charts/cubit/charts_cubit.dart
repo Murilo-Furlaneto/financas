@@ -1,5 +1,5 @@
-import 'package:financas/data/repositories/charts_repository.dart';
-import 'package:financas/shared/enum/enum_categories.dart';
+import 'package:financas/data/repositories/charts/charts_repository.dart';
+import 'package:financas/core/enum/enum_categories.dart';
 import 'package:financas/ui/charts/cubit/charts_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer';

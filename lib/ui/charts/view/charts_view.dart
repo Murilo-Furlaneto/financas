@@ -1,4 +1,4 @@
-import 'package:financas/shared/enum/enum_categories.dart';
+import 'package:financas/core/enum/enum_categories.dart';
 import 'package:financas/ui/charts/cubit/charts_cubit.dart';
 import 'package:financas/ui/charts/cubit/charts_state.dart';
 import 'package:fl_chart/fl_chart.dart';
