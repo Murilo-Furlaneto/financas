@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:financas/data/enum/enum_month.dart';
-import 'package:financas/data/enum/enum_categories.dart';
+import 'package:financas/core/enum/enum_month.dart';
+import 'package:financas/core/enum/enum_categories.dart';
 import 'package:financas/domain/entities/day/day_entity.dart';
 import 'package:financas/domain/entities/monthly_expenses/monthly_expenses_entity.dart';
 import 'package:financas/ui/home/widgets/bar_chart_widget.dart';

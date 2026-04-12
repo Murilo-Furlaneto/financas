@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:financas/data/enum/enum_categories.dart';
+import 'package:financas/core/enum/enum_categories.dart';
 
 class MonthlyExpenses {
   final String id;

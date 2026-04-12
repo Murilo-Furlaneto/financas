@@ -1,6 +1,11 @@
+import 'package:financas/core/validation/email_validator.dart';
+import 'package:financas/core/validation/name_validator.dart';
+import 'package:financas/core/validation/password_validator.dart';
 import 'package:financas/data/repositories/firebase/firebase_repository.dart';
 import 'package:financas/data/repositories/user/user_repository.dart';
 import 'package:financas/domain/entities/user/user_entity.dart';
+import 'package:financas/domain/usecases/auth/login_usecase.dart';
+import 'package:financas/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:financas/ui/authentication/cubit/auth_cubit_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +13,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthCubit extends Cubit<AuthCubitState> {
   final UserRepository userRepository;
   final FirebaseRepository firebaseRepository;
+  final LoginUseCase _loginUseCase;
+  final SignUpUseCase _signUpUseCase;
 
   AuthCubit(this.userRepository, this.firebaseRepository)
-      : super(AuthInitial());
+      : _loginUseCase = LoginUseCase(
+          firebaseRepository: firebaseRepository,
+          userRepository: userRepository,
+          emailValidator: EmailValidator(),
+          passwordValidator: PasswordValidator(),
+        ),
+        _signUpUseCase = SignUpUseCase(
+          firebaseRepository: firebaseRepository,
+          userRepository: userRepository,
+          nameValidator: NameValidator(),
+          emailValidator: EmailValidator(),
+          passwordValidator: PasswordValidator(),
+        ),
+        super(AuthInitial());
 
   User _user = User(nome: '', email: '', senha: '');
 
@@ -20,15 +40,33 @@ class AuthCubit extends Cubit<AuthCubitState> {
       String email, String senha, BuildContext context) async {
     emit(AuthLoading());
     try {
-      await firebaseRepository.loginFirebase(email, senha, context);
-      final user = await firebaseRepository.getCurrentUser();
-      user.senha = senha;
-      await userRepository.saveUser(user);
+      final user = await _loginUseCase.execute(email, senha, context);
       _user = user;
       emit(AuthLoaded(user));
     } catch (e) {
-      emit(AuthError('Erro ao fazer login: ${e.toString()}'));
-      throw Exception('Erro ao fazer login: ${e.toString()}');
+      emit(AuthError(e.toString().replaceAll('Exception: ', '')));
+      rethrow;
+    }
+  }
+
+  Future<void> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    emit(AuthLoading());
+    try {
+      await _signUpUseCase.execute(
+        name: name,
+        email: email,
+        password: password,
+      );
+      final user = User(nome: name, email: email, senha: password);
+      _user = user;
+      emit(AuthLoaded(user));
+    } catch (e) {
+      emit(AuthError(e.toString().replaceAll('Exception: ', '')));
+      rethrow;
     }
   }
 
