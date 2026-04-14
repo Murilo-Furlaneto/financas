@@ -1,28 +1,27 @@
 sealed class AppException implements Exception {
-  const AppException(this.code, this.message);
-  final String code;
+  const AppException(this.message);
   final String message;
 
   @override
-  String toString() => 'AppException($code): $message';
+  String toString() => 'AppExceptio: $message';
 }
 
 class NetworkException extends AppException {
-  const NetworkException(String message) : super('network', message);
+  const NetworkException(String message) : super(message);
 }
 
 class ServerException extends AppException {
-  const ServerException(String message) : super('server', message);
+  const ServerException(String message) : super(message);
 }
 
 class AuthException extends AppException {
-  const AuthException(String message) : super('auth', message);
+  const AuthException(String message) : super(message);
 }
 
 class DatabaseException extends AppException {
-  const DatabaseException(String message) : super('database', message);
+  const DatabaseException(String message) : super(message);
 }
 
 class UnknownException extends AppException {
-  const UnknownException(String message) : super('unknown', message);
+  const UnknownException(String message) : super(message);
 }

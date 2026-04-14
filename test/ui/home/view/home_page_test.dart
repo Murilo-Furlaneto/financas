@@ -7,6 +7,6 @@ void main() {
     await tester.pumpWidget(const MyApp());
     expect(find.byIcon(Icons.add), findsOneWidget);
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pump;
+    tester.pump;
   });
 }
