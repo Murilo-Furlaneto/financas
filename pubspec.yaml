@@ -47,6 +47,8 @@ dependencies:
   flutter_bloc: ^9.1.1
   equatable: ^2.0.5
   get_it: ^9.2.1
+  mocktail: ^1.0.5
+  email_validator: ^3.0.0
 
 
 dev_dependencies:

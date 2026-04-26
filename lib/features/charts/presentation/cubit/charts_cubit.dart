@@ -1,15 +1,17 @@
 import 'package:financas/core/result/result.dart';
-import 'package:financas/features/charts/data/repositories/charts_repository.dart';
 import 'package:financas/core/enum/enum_categories.dart';
 import 'package:financas/features/charts/presentation/cubit/charts_state.dart';
+import 'package:financas/features/charts/domain/usecases/get_expenses_grouped_by_category_usecase.dart';
+import 'package:financas/features/charts/domain/usecases/get_expenses_by_month_usecase.dart';
 import 'package:financas/features/monthly_expenses/domain/entities/monthly_expenses_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer';
 
 class ChartsCubit extends Cubit<ChartsState> {
-  final ChartsRepository _repository;
+  final GetExpensesGroupedByCategoryUseCase _groupedUseCase;
+  final GetExpensesByMonthUseCase _monthUseCase;
 
-  ChartsCubit(this._repository) : super(ChartsInitial());
+  ChartsCubit(this._groupedUseCase, this._monthUseCase) : super(ChartsInitial());
 
   Future<void> loadChartData({int? month, int? year, String? category}) async {
     try {
@@ -21,13 +23,13 @@ class ChartsCubit extends Cubit<ChartsState> {
       final selectedYear = year ?? now.year;
       final selectedCategory = category ?? "Serviços Públicos";
 
-      final groupedResult = await _repository.getExpensesGroupedByCategory(
+      final groupedResult = await _groupedUseCase.execute(
         selectedMonth,
         selectedYear,
         category: null,
       );
 
-      final expensesResult = await _repository.getExpensesByMonth(
+      final expensesResult = await _monthUseCase.execute(
         selectedMonth,
         selectedYear,
         category: null,

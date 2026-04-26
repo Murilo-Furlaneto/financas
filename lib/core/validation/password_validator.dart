@@ -3,7 +3,12 @@ import 'package:financas/core/validation/validator.dart';
 class PasswordValidator implements Validator<String?> {
   final int minLength;
 
-  PasswordValidator({this.minLength = 6});
+  PasswordValidator({this.minLength = 8});
+
+  static final _upperCaseRegex = RegExp(r'[A-Z]');
+  static final _lowerCaseRegex = RegExp(r'[a-z]');
+  static final _numberRegex = RegExp(r'[0-9]');
+  static final _specialCharRegex = RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
 
   @override
   String? validate(String? value) {
@@ -15,16 +20,20 @@ class PasswordValidator implements Validator<String?> {
       return 'A senha deve ter pelo menos $minLength caracteres';
     }
 
-    if (!value.contains(RegExp(r'[A-Z]'))) {
+    if (!_upperCaseRegex.hasMatch(value)) {
       return 'A senha deve conter pelo menos uma letra maiúscula';
     }
 
-    if (!value.contains(RegExp(r'[a-z]'))) {
+    if (!_lowerCaseRegex.hasMatch(value)) {
       return 'A senha deve conter pelo menos uma letra minúscula';
     }
 
-    if (!value.contains(RegExp(r'[0-9]'))) {
+    if (!_numberRegex.hasMatch(value)) {
       return 'A senha deve conter pelo menos um número';
+    }
+
+    if (!_specialCharRegex.hasMatch(value)) {
+      return 'A senha deve conter pelo menos um caractere especial';
     }
 
     return null;

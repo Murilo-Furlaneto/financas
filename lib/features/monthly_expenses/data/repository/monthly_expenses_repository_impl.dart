@@ -1,12 +1,16 @@
 import 'package:financas/core/database/local/sqlite.dart';
 import 'package:financas/core/result/result.dart';
-import 'package:financas/features/monthly_expenses/domain/repositories/monthly_expenses_repository.dart';
+import 'package:financas/features/monthly_expenses/domain/repository/monthly_expenses_repository.dart';
 import 'package:financas/features/monthly_expenses/domain/entities/monthly_expenses_entity.dart';
+import 'package:flutter/foundation.dart';
 
 class MonthlyExpensesRepositoryImpl implements MonthlyExpensesRepository {
   final SqliteDataBase _sqliteDatabase;
 
   MonthlyExpensesRepositoryImpl(this._sqliteDatabase);
+  static List<MonthlyExpenses> _parseExpenses(List<Map<String, dynamic>> maps) {
+    return maps.map((json) => MonthlyExpenses.fromMap(json)).toList();
+  }
 
   @override
   Future<Result<void>> createExpense(MonthlyExpenses expense) async {
@@ -21,7 +25,9 @@ class MonthlyExpensesRepositoryImpl implements MonthlyExpensesRepository {
   @override
   Future<Result<List<MonthlyExpenses>>> getAllExpenses() async {
     try {
-      final result = await _sqliteDatabase.getAllExpenses();
+      final db = await _sqliteDatabase.database;
+      final List<Map<String,dynamic>> maps = await db.query('monthlyExpenses');
+      final result = await compute(_parseExpenses, maps);
       return Success(result);
     } catch (e) {
       return Failure('Erro ao buscar despesas: ${e.toString()}');

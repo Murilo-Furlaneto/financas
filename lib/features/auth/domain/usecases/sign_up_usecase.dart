@@ -2,8 +2,8 @@ import 'package:financas/core/result/result.dart';
 import 'package:financas/core/validation/email_validator.dart';
 import 'package:financas/core/validation/name_validator.dart';
 import 'package:financas/core/validation/password_validator.dart';
-import 'package:financas/features/auth/data/repositories/firebase_repository.dart';
-import 'package:financas/features/auth/data/repositories/user_repository.dart';
+import 'package:financas/features/auth/domain/repository/firebase_repository.dart';
+import 'package:financas/features/user/domain/repository/user_repository.dart';
 import 'package:financas/features/auth/domain/entities/user_entity.dart';
 
 class SignUpUseCase {

@@ -20,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final MonthlyExpensesCubit cubit;
+
   @override
   void initState() {
     super.initState();
@@ -31,246 +32,272 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-             // ProfilePage removida ou movida, ajuste conforme necessário
-          },
-          icon: const Icon(
-            Icons.account_circle,
-            size: 30,
-          ),
-        ),
-        title: const Text('Minhas despesas'),
+        title: const Text('Finanças'),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () => showAddAccountDialog(context),
-            icon: const Icon(
-              Icons.add,
-              size: 30,
-            ),
+            icon: const Icon(Icons.add_circle_outline),
           ),
         ],
       ),
-      body: SafeArea(
-        child: BlocBuilder<MonthlyExpensesCubit, MonthlyExpensesState>(
-          builder: (context, state) {
-            if (state is MonthlyExpensesLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is MonthlyExpensesError) {
-              return Center(child: Text(state.message));
-            } else if (state is MonthlyExpensesLoaded) {
-              return Column(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text.rich(
-                        TextSpan(
-                          text: 'Gastos de ${EnumMonth.nameActualMonth()}:',
-                          style: const TextStyle(
-                            fontSize: 24,
+      body: BlocBuilder<MonthlyExpensesCubit, MonthlyExpensesState>(
+        builder: (context, state) {
+          if (state is MonthlyExpensesLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is MonthlyExpensesError) {
+            return Center(child: Text(state.message));
+          } else if (state is MonthlyExpensesLoaded) {
+            return CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: _buildHeaderCard(state.totalAmount),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      'Resumo semanal',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' R\$ ${state.totalAmount.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.expenses.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final expenses = state.expenses[index];
-                        return Dismissible(
-                          key: Key(expenses.id),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: const Icon(Icons.delete, color: Colors.white),
-                          ),
-                          onDismissed: (direction) {
-                            context
-                                .read<MonthlyExpensesCubit>()
-                                .deleteExpense(expenses.id);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('${expenses.title} excluída')),
-                            );
-                          },
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              child: Text(expenses.title.isNotEmpty ? expenses.title[0] : '?'),
-                            ),
-                            title: Text(
-                              expenses.title,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text('Vencimento: ${expenses.dueDate}'),
-                            trailing: Text(
-                              'R\$ ${expenses.amount.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: BarChartWidget(
+                      days: _calculateWeeklySummary(state.expenses),
                     ),
                   ),
-                 const Text(
-                    'Resumo semanal',
-                    style: TextStyle(fontSize: 20),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      'Últimas despesas',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
                   ),
-                  BarChartWidget(
-                    days: _calculateWeeklySummary(state.expenses),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final expense = state.expenses[index];
+                      return _buildTransactionCard(expense);
+                    },
+                    childCount: state.expenses.length,
                   ),
-                ],
-              );
-            }
-            return const Center(
-              child: Text('Não há despesas cadastradas.'),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 80)),
+              ],
             );
-          },
+          }
+          return const Center(
+            child: Text('Não há despesas cadastradas.'),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildHeaderCard(double amount) {
+    return Card(
+      margin: const EdgeInsets.all(16),
+      elevation: 0,
+      color: Theme.of(context).colorScheme.primaryContainer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Gasto Total de ${EnumMonth.nameActualMonth()}',
+              style: Theme.of(context).colorScheme.onPrimaryContainer != null
+                  ? TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.8))
+                  : null,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'R\$ ${amount.toStringAsFixed(2)}',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionCard(MonthlyExpenses expense) {
+    return Dismissible(
+      key: Key(expense.id),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.errorContainer,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onErrorContainer),
+      ),
+      onDismissed: (direction) {
+        context.read<MonthlyExpensesCubit>().deleteExpense(expense.id);
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        elevation: 0,
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            child: Text(
+              expense.title.isNotEmpty ? expense.title[0].toUpperCase() : '?',
+              style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),
+            ),
+          ),
+          title: Text(
+            expense.title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text('Vence dia ${expense.dueDate}'),
+          trailing: Text(
+            '- R\$ ${expense.amount.toStringAsFixed(2)}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.error,
+              fontSize: 16,
+            ),
+          ),
         ),
       ),
     );
   }
 
   List<Day> _calculateWeeklySummary(List<MonthlyExpenses> expenses) {
-    Map<int, double> weeklySummary = {
-      1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 0.0, 7: 0.0,
-    };
-
+    Map<int, double> weeklySummary = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0};
     final now = DateTime.now();
     for (var expense in expenses) {
       try {
         final expenseDate = DateTime(now.year, now.month, expense.dueDate);
-        final weekday = expenseDate.weekday;
-        weeklySummary[weekday] = (weeklySummary[weekday] ?? 0) + expense.amount;
-      } catch (e) {
-          log('Invalid date for expense "${expense.title}": ${expense.dueDate}');
-      }
+        weeklySummary[expenseDate.weekday] = (weeklySummary[expenseDate.weekday] ?? 0) + expense.amount;
+      } catch (_) {}
     }
-
     return [
-      Day(id: 'Seg', valor: weeklySummary[2]!),
-      Day(id: 'Ter', valor: weeklySummary[3]!),
-      Day(id: 'Qua', valor: weeklySummary[4]!),
-      Day(id: 'Qui', valor: weeklySummary[5]!),
-      Day(id: 'Sex', valor: weeklySummary[6]!),
-      Day(id: 'Sab', valor: weeklySummary[7]!),
-      Day(id: 'Dom', valor: weeklySummary[1]!),
+      Day(id: 'Seg', valor: weeklySummary[1]!),
+      Day(id: 'Ter', valor: weeklySummary[2]!),
+      Day(id: 'Qua', valor: weeklySummary[3]!),
+      Day(id: 'Qui', valor: weeklySummary[4]!),
+      Day(id: 'Sex', valor: weeklySummary[5]!),
+      Day(id: 'Sab', valor: weeklySummary[6]!),
+      Day(id: 'Dom', valor: weeklySummary[7]!),
     ];
   }
 
   void showAddAccountDialog(BuildContext context) {
-    final TextEditingController accountNameController = TextEditingController();
-    final TextEditingController dueDateController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController dateController = TextEditingController();
     final TextEditingController amountController = TextEditingController();
     Categories? selectedCategory;
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: const Text('Adicionar Conta'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  TextField(
-                    controller: accountNameController,
-                    decoration: const InputDecoration(labelText: 'Nome da conta'),
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => Padding(
+          padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom + 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Nova Despesa', style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 24),
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Título',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: dateController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Dia (1-31)',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
                   ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(2),
-                    ],
-                    controller: dueDateController,
-                    decoration: const InputDecoration(labelText: 'Dia do Vencimento'),
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: amountController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                    ],
-                    decoration: const InputDecoration(labelText: 'Valor'),
-                  ),
-                 const SizedBox(height: 5,),
-                  DropdownButton<Categories>(
-                    value: selectedCategory,
-                    hint: const Text('Selecione uma categoria'),
-                    isExpanded: true,
-                    items: Categories.values.map((e) {
-                      return DropdownMenuItem<Categories>(
-                        value: e,
-                        child: Text(e.label),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCategory = value!;
-                      });
-                    },
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TextField(
+                      controller: amountController,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        labelText: 'Valor',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        prefixText: 'R\$ ',
+                      ),
+                    ),
                   ),
                 ],
               ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancelar'),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<Categories>(
+                value: selectedCategory,
+                decoration: InputDecoration(
+                  labelText: 'Categoria',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                TextButton(
+                items: Categories.values.map((c) => DropdownMenuItem(value: c, child: Text(c.label))).toList(),
+                onChanged: (v) => setState(() => selectedCategory = v),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
                   onPressed: () {
-                    String accountName = accountNameController.text;
-                    int? dueDate = int.tryParse(dueDateController.text);
-                    double? amount = double.tryParse(amountController.text);
-
-                    if (dueDate != null && dueDate >= 1 && dueDate <= 31 && amount != null &&
-                        accountName.isNotEmpty && selectedCategory != null) {
+                    if (nameController.text.isNotEmpty &&
+                        dateController.text.isNotEmpty &&
+                        amountController.text.isNotEmpty &&
+                        selectedCategory != null) {
                       context.read<MonthlyExpensesCubit>().addExpense(
                             MonthlyExpenses(
                               id: const Uuid().v4(),
-                              title: accountName,
+                              title: nameController.text,
                               category: selectedCategory!,
-                              amount: amount,
-                              dueDate: dueDate,
+                              amount: double.parse(amountController.text),
+                              dueDate: int.parse(dateController.text),
                               createdAt: DateTime.now().millisecondsSinceEpoch,
                             ),
                           );
                       Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Por favor, insira valores válidos')),
-                      );
                     }
                   },
-                  child: const Text('Salvar'),
+                  child: const Text('Salvar Despesa'),
                 ),
-              ],
-            );
-          },
-        );
-      },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

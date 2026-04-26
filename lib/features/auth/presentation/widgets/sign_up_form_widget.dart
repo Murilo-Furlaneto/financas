@@ -1,7 +1,7 @@
 import 'package:financas/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:financas/features/auth/presentation/cubit/auth_cubit_state.dart';
 import 'package:financas/features/auth/presentation/pages/login_page.dart';
-import 'package:financas/features/home/presentation/pages/home_page.dart';
+import 'package:financas/features/home/presentation/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,7 +41,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
     if (!mounted) return;
     if (authCubit.state is AuthLoaded) {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const HomePage()));
+          MaterialPageRoute(builder: (context) => const MainPage()));
     }
   }
 
