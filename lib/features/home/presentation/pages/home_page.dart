@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:financas/core/enum/enum_month.dart';
 import 'package:financas/core/enum/enum_categories.dart';
 import 'package:financas/core/entities/day_entity.dart';
@@ -7,7 +6,6 @@ import 'package:financas/features/home/presentation/widgets/bar_chart_widget.dar
 import 'package:financas/features/monthly_expenses/presentation/cubit/monthly_expenses_cubit.dart';
 import 'package:financas/features/monthly_expenses/presentation/cubit/monthly_expenses_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
@@ -118,9 +116,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text(
               'Gasto Total de ${EnumMonth.nameActualMonth()}',
-              style: Theme.of(context).colorScheme.onPrimaryContainer != null
-                  ? TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.8))
-                  : null,
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.8)),
             ),
             const SizedBox(height: 8),
             Text(
@@ -155,7 +151,7 @@ class _HomePageState extends State<HomePage> {
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         elevation: 0,
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -261,7 +257,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<Categories>(
-                value: selectedCategory,
+                initialValue: selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Categoria',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

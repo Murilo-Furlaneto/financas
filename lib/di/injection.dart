@@ -2,7 +2,7 @@ import 'package:financas/core/validation/email_validator.dart';
 import 'package:financas/core/validation/name_validator.dart';
 import 'package:financas/core/validation/password_validator.dart';
 import 'package:financas/core/database/local/sqlite.dart';
-import 'package:financas/features/auth/data/repositories/firebase_repository_impl.dart';
+import 'package:financas/features/auth/data/repository/firebase_repository_impl.dart';
 import 'package:financas/features/auth/domain/repository/firebase_repository.dart';
 import 'package:financas/features/charts/data/repository/charts_repository_impl.dart';
 import 'package:financas/features/charts/domain/repository/charts_repository.dart';

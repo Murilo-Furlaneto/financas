@@ -23,11 +23,19 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: Text(message),
           backgroundColor: Colors.red.shade600,
           behavior: SnackBarBehavior.floating,
         ),
       );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override

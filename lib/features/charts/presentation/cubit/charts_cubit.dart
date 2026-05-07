@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:financas/core/result/result.dart';
 import 'package:financas/core/enum/enum_categories.dart';
 import 'package:financas/features/charts/presentation/cubit/charts_state.dart';
@@ -5,7 +6,6 @@ import 'package:financas/features/charts/domain/usecases/get_expenses_grouped_by
 import 'package:financas/features/charts/domain/usecases/get_expenses_by_month_usecase.dart';
 import 'package:financas/features/monthly_expenses/domain/entities/monthly_expenses_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:developer';
 
 class ChartsCubit extends Cubit<ChartsState> {
   final GetExpensesGroupedByCategoryUseCase _groupedUseCase;
@@ -15,7 +15,7 @@ class ChartsCubit extends Cubit<ChartsState> {
 
   Future<void> loadChartData({int? month, int? year, String? category}) async {
     try {
-      log('Loading chart data with month=$month, year=$year, category=$category');
+      log('Loading chart data for month: $month, year: $year', name: 'ChartsCubit.loadChartData');
       emit(ChartsLoading());
 
       final now = DateTime.now();
@@ -39,6 +39,7 @@ class ChartsCubit extends Cubit<ChartsState> {
           expensesResult is Success<List<MonthlyExpenses>>) {
         final categories = ['', ...Categories.values.map((e) => e.label)];
         
+        log('Successfully loaded chart data', name: 'ChartsCubit.loadChartData');
         emit(ChartsLoaded(
           expensesByCategory: (groupedResult).data,
           expenses: (expensesResult).data,
@@ -47,15 +48,15 @@ class ChartsCubit extends Cubit<ChartsState> {
           selectedCategory: selectedCategory,
           categories: categories,
         ));
-        log('ChartsLoaded state emitted');
       } else {
         String errorMsg = 'Erro ao carregar dados';
         if (groupedResult is Failure) errorMsg = (groupedResult as Failure).message;
         if (expensesResult is Failure) errorMsg = (expensesResult as Failure).message;
+        log('Failed to load chart data: $errorMsg', name: 'ChartsCubit.loadChartData');
         emit(ChartsError(errorMsg));
       }
     } catch (e) {
-      log('Error loading chart data: $e');
+      log('Unexpected error loading chart data: $e', name: 'ChartsCubit.loadChartData', error: e);
       emit(ChartsError('Erro ao carregar os dados do gráfico: $e'));
     }
   }
